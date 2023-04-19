@@ -154,14 +154,11 @@ static int calc_path_loss_log_distance(void *model_param,
 	 */
 	PL0 = 20.0 * log10(4.0 * M_PI * 1.0 * f / SPEED_LIGHT);
 
-	
-
 	/*
 	 * Calculate signal strength with Log-distance path loss model
 	 * https://en.wikipedia.org/wiki/Log-distance_path_loss_model
 	 */
 	PL = PL0 + 10.0 * param->path_loss_exponent * log10(d) + param->Xg;
-
 	return PL;
 }
 /*
@@ -236,16 +233,42 @@ static int calc_path_loss_log_normal_shadowing(void *model_param,
 	 * https://en.wikipedia.org/wiki/Free-space_path_loss
 	 */
 	PL0 = 20.0 * log10(4.0 * M_PI * 1.0 * f / SPEED_LIGHT);
-
+	// char filename[1024] = {0};
 	/*
 	 * Calculate signal strength with Log-distance path loss model + gRandom (Gaussian random variable)
 	 * https://en.wikipedia.org/wiki/Log-distance_path_loss_model
 	 */
-	PL = PL0 + 10.0 * param->path_loss_exponent * log10(d) - gRandom;
-	FILE* file = fopen("/home/minhhai/HaiVM-5GScheduler-forMPQUIC-ReLeS/MininetWifi/logs.csv", "a+");
-	fprintf(file, "%.2f,%.2f\n", d, PL);
-	fclose(file);
+	float U1 = ((float)rand()/(float)(RAND_MAX)), U2 = ((float)rand()/(float)(RAND_MAX));
+	gRandom = sqrt(-2*log(U1)) * cos(2*M_PI*U2);
+	PL = PL0 + 10.0 * param->path_loss_exponent * log10(d) - gRandom*PL0/20;
+	// if (src->addr[0] == 0 && src->addr[5] == 4) {
+	// 	if( dst->addr[0] == 2) {
+	// 		// strcpy(filename, "/home/ubuntu/wmediumd/wmediumd/MAC0.csv");
+	// 		FILE* file = fopen("/home/ubuntu/HaiVM-5GScheduler-forMPQUIC-ReLeS/MininetWifi/MAC00.csv", "a+");
+	// 		fprintf(file, "%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f\n", src->x, src->y, src->z, dst->x, dst->y, dst->z, d, PL, gRandom*PL0/20);
+	// 		fclose(file);
+	// 	} else if (dst->addr[0] == 0 && dst->addr[5] == 3) {
+	// 		FILE* file = fopen("/home/ubuntu/HaiVM-5GScheduler-forMPQUIC-ReLeS/MininetWifi/MAC01.csv", "a+");
+	// 		fprintf(file, "%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f\n", src->x, src->y, src->z, dst->x, dst->y, dst->z, d, PL, gRandom*PL0/20);
+	// 		fclose(file);
+	// 	}
 
+	// } else if (src->addr[0]==0 && src->addr[5] == 5)
+	// {
+	// 	if( dst->addr[0] == 2) {
+	// 		// strcpy(filename, "/home/ubuntu/wmediumd/wmediumd/MAC0.csv");
+	// 		FILE* file = fopen("/home/ubuntu/HaiVM-5GScheduler-forMPQUIC-ReLeS/MininetWifi/MAC10.csv", "a+");
+	// 		fprintf(file, "%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f\n", src->x, src->y, src->z, dst->x, dst->y, dst->z, d, PL, gRandom*PL0/20);
+	// 		fclose(file);
+	// 	} else if (dst->addr[0] == 0 && dst->addr[5] == 3) {
+	// 		FILE* file = fopen("/home/ubuntu/HaiVM-5GScheduler-forMPQUIC-ReLeS/MininetWifi/MAC11.csv", "a+");
+	// 		fprintf(file, "%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f\n", src->x, src->y, src->z, dst->x, dst->y, dst->z, d, PL, gRandom*PL0/20);
+	// 		fclose(file);
+	// 	}
+
+	// }
+	
+	
 	return PL;
 }
 /*
