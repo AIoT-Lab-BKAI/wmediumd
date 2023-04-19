@@ -154,11 +154,14 @@ static int calc_path_loss_log_distance(void *model_param,
 	 */
 	PL0 = 20.0 * log10(4.0 * M_PI * 1.0 * f / SPEED_LIGHT);
 
+	
+
 	/*
 	 * Calculate signal strength with Log-distance path loss model
 	 * https://en.wikipedia.org/wiki/Log-distance_path_loss_model
 	 */
 	PL = PL0 + 10.0 * param->path_loss_exponent * log10(d) + param->Xg;
+
 	return PL;
 }
 /*
@@ -239,6 +242,10 @@ static int calc_path_loss_log_normal_shadowing(void *model_param,
 	 * https://en.wikipedia.org/wiki/Log-distance_path_loss_model
 	 */
 	PL = PL0 + 10.0 * param->path_loss_exponent * log10(d) - gRandom;
+	FILE* file = fopen("/home/minhhai/HaiVM-5GScheduler-forMPQUIC-ReLeS/MininetWifi/logs.csv", "a+");
+	fprintf(file, "%.2f,%.2f\n", d, PL);
+	fclose(file);
+
 	return PL;
 }
 /*

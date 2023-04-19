@@ -327,7 +327,13 @@ int read_per_file(struct wmediumd *ctx, const char *file_name)
     strcat (filename, files[0]);
 
 	fp = fopen(filename, "r");
+	// FILE* logfile = fopen('./wmediumd.logs', 'a+');
+	printf("PER file 2: %s\n", filename);
+	// fclose(logfile);
 	if (fp == NULL) {
+		// FILE* logfile = fopen('./wmediumd.logs', 'a+');
+		printf("File null\n");
+		// fclose(logfile);
 		w_flogf(ctx, LOG_ERR, stderr,
 			"fopen failed %s\n", strerror(errno));
 		return EXIT_FAILURE;

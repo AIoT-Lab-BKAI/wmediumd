@@ -974,6 +974,8 @@ int main(int argc, char *argv[])
 		case 'x':
 			printf("Input packet error rate file: %s\n", optarg);
 			per_file = optarg;
+			
+			printf("PER file: %s\n", per_file);
 			break;
 		case ':':
 			printf("wmediumd: Error - Option `%c' "
